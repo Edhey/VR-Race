@@ -90,7 +90,7 @@ El objetivo principal es minimizar la discrepancia entre el sistema vestibular (
 
 [X] Control del Usuario: El usuario tiene control sobre sus movimientos en todo momento para permitir la anticipación. Se evitan movimientos de cámara forzados (a menos que sea una experiencia tipo "montaña rusa" diseñada así explícitamente). **Se contempla**
 
-[] Referencia Estática (Cockpit): Si el usuario se mueve virtualmente pero está sentado físicamente, se ha incluido una referencia visual estática (cabina, silla, vehículo) para anclar su percepción.
+[X] Referencia Estática (Cockpit): Si el usuario se mueve virtualmente pero está sentado físicamente, se ha incluido una referencia visual estática (cabina, silla, vehículo) para anclar su percepción. **Se contempla**
 
 [ ] Head Tracking Continuo: Se asegura el seguimiento de la cabeza (mínimo 3 grados de libertad) para que la posición de los objetos se mantenga coherente. Si el tracking falla o el rendimiento cae, la pantalla se desvanece (fade-out) en lugar de congelarse.
 
@@ -99,13 +99,13 @@ El objetivo principal es minimizar la discrepancia entre el sistema vestibular (
 
 [X] Posicionamiento UI: Los elementos de la interfaz aparecen dentro del campo de visión (FOV) inicial y se actualizan/mueven suavemente si el usuario cambia de posición, manteniéndose visibles. **Se contempla**
 
-[ ] Retícula (Si aplica): **No aplica**
+[X] Retícula (Si aplica): **Se contempla**
 
-[ ] Se muestra una retícula para ayudar a apuntar a objetivos pequeños. **No aplica**
+[X] Se muestra una retícula para ayudar a apuntar a objetivos pequeños. **Se contempla**
 
-[ ] Se oculta o cambia de estado (hover) cuando no es necesaria para no romper la inmersión. **No aplica**
+[X] Se oculta o cambia de estado (hover) cuando no es necesaria para no romper la inmersión. **Se contempla**
 
-[ ] Feedback de Activación (Gaze): Si se usa activación por mirada (gaze), se muestra un indicador visual de progreso y el tiempo de espera no es excesivo para evitar frustración. **No aplica**
+[X] Feedback de Activación (Gaze): Si se usa activación por mirada (gaze), se muestra un indicador visual de progreso y el tiempo de espera no es excesivo para evitar frustración. **Se contempla**
 
 1. Ergonomía y Zonas de Confort
 Basado en las áreas de visualización cómodas (Michael Alger) para evitar dolores de cuello.
@@ -119,7 +119,7 @@ Basado en las áreas de visualización cómodas (Michael Alger) para evitar dolo
 
 [ ] Feedback de Transición: Al cambiar de escena o teletransportarse, se utiliza un fundido a negro o a un color neutro, acompañado de feedback auditivo. **No aplica**
 
-[ ] Audio Espacial: Se utiliza audio 3D para localizar objetos y guiar la atención del usuario dentro del entorno. **No se contempla**
+[X] Audio Espacial: Se utiliza audio 3D para localizar objetos y guiar la atención del usuario dentro del entorno. **Se contempla**
 
 1. Inmersión y Coherencia (Propiocepción)
 [ ] Representación de las Manos: **No aplica**
@@ -128,9 +128,9 @@ Basado en las áreas de visualización cómodas (Michael Alger) para evitar dolo
 
 [ ] Si se representan los mandos, las interacciones se limitan a usar herramientas/botones. Si se representan manos, la lógica es "coger/tocar". **No aplica**
 
-[X] Consistencia Interactiva: Los objetos que parecen interactivos lo son. Los objetos decorativos (no interactivos) tienen una apariencia distinta o están fuera del alcance del usuario.
+[X] Consistencia Interactiva: Los objetos que parecen interactivos lo son. Los objetos decorativos (no interactivos) tienen una apariencia distinta o están fuera del alcance del usuario. **Se contempla**
 
-[X] Escala y Seguridad: El mundo mantiene una escala realista acorde a las expectativas. Se delimitan las áreas de juego para evitar accidentes físicos (golpes con el mundo real).
+[X] Escala y Seguridad: El mundo mantiene una escala realista acorde a las expectativas. Se delimitan las áreas de juego para evitar accidentes físicos (golpes con el mundo real). **Se contempla**
 
 ## Acta de los acuerdos del grupo respecto al trabajo en equipo
 
