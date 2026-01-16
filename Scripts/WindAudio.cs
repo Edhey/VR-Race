@@ -22,8 +22,9 @@ public class WindAudio : MonoBehaviour {
   }
 
   void Update() {
-    if (_carRigidbody == null)
+    if (_carRigidbody == null) {
       return;
+    }
 
     float speed = _carRigidbody.linearVelocity.magnitude * 3.6f;
     float speedFactor = Mathf.Clamp01(speed / maxSpeed); // factor de intensidad (de 0 a 1)

@@ -44,8 +44,10 @@ namespace Assets.Scripts.Voice {
     }
 
     private void StartListeningLoop() {
-      if (_microphoneRecord.IsRecording)
+      if (_microphoneRecord.IsRecording) {
         return;
+      }
+
       _microphoneRecord.StartRecord();
       UpdateUI("Esperando orden...", Color.gray);
     }
@@ -53,14 +55,18 @@ namespace Assets.Scripts.Voice {
     private void OnVadChanged(bool isSpeaking) {
       if (isSpeaking) {
         UpdateUI("¡Te escucho!", Color.yellow);
-        if (_volumeMeter)
+        if (_volumeMeter) {
           _volumeMeter.color = Color.green;
+        }
       } else {
-        if (!_microphoneRecord.IsRecording)
+        if (!_microphoneRecord.IsRecording) {
           return;
+        }
+
         UpdateUI("...", Color.gray);
-        if (_volumeMeter)
+        if (_volumeMeter) {
           _volumeMeter.color = Color.white;
+        }
       }
     }
 
@@ -72,8 +78,9 @@ namespace Assets.Scripts.Voice {
       WhisperResult result = await _whisper.GetTextAsync(recordedAudio.Data,
         recordedAudio.Frequency, recordedAudio.Channels);
 
-      if (result == null || string.IsNullOrEmpty(result.Result))
+      if (result == null || string.IsNullOrEmpty(result.Result)) {
         return;
+      }
 
       string text = result.Result;
       UpdateUI($"Oído: {text}", Color.white);
@@ -106,8 +113,9 @@ namespace Assets.Scripts.Voice {
             break;
           }
         }
-        if (commandFound)
+        if (commandFound) {
           break;
+        }
       }
 
       if (!commandFound) {

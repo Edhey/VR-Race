@@ -46,12 +46,17 @@ public class HUDManager : MonoBehaviour {
     }
 
     // Inicializar textos base
-    if (_lapText)
+    if (_lapText) {
       _baseLapTemplate = _lapText.text;
-    if (_currentCheckpointText)
+    }
+
+    if (_currentCheckpointText) {
       _baseCheckpointTemplate = _currentCheckpointText.text;
-    if (_timeText)
+    }
+
+    if (_timeText) {
       _baseTimeTemplate = _timeText.text;
+    }
 
     if (_skippedPointImage != null) {
       _skippedPointImage.gameObject.SetActive(false);
@@ -106,10 +111,11 @@ public class HUDManager : MonoBehaviour {
     if (_rpmBar != null) {
       _rpmBar.fillAmount = rpm / _maxRPM;
       // Opcional: Cambiar color si llega al límite
-      if (rpm > _maxRPM * 0.9f)
+      if (rpm > _maxRPM * 0.9f) {
         _rpmBar.color = Color.red;
-      else
+      } else {
         _rpmBar.color = Color.cyan;
+      }
     }
 
     // 3. Marchas
@@ -155,37 +161,49 @@ public class HUDManager : MonoBehaviour {
   }
 
   private void SetImageAlpha(float alpha) {
-    if (_skippedPointImage == null)
+    if (_skippedPointImage == null) {
       return;
+    }
+
     Color imageColor = _skippedPointImage.color;
     imageColor.a = alpha;
     _skippedPointImage.color = imageColor;
   }
 
   private void ShowSkippedPointWarning() {
-    if (_warningCoroutine != null)
+    if (_warningCoroutine != null) {
       StopCoroutine(_warningCoroutine);
+    }
+
     _warningCoroutine = StartCoroutine(HideWarningAfterDelay());
   }
 
   private void ShowRaceFinished() {
-    if (_raceFinishedImage != null)
+    if (_raceFinishedImage != null) {
       _raceFinishedImage.gameObject.SetActive(true);
+      _timerIsRunning = false;
+    }
+    if (_timeText != null) {
+      _timeText.color = Color.green;
+    }
   }
 
   private void HandleReachedCheckpoint(int checkpointIndex) {
     if (_warningCoroutine != null) {
       StopCoroutine(_warningCoroutine);
-      if (_skippedPointImage)
+      if (_skippedPointImage) {
         _skippedPointImage.gameObject.SetActive(false);
+      }
     }
-    if (_currentCheckpointText)
+    if (_currentCheckpointText) {
       _currentCheckpointText.text = FormatCheckpointText(checkpointIndex, _checkpointHandler.TotalCheckpoints);
+    }
   }
 
   private void HandleLapCompleted(int lapNumber) {
-    if (_lapText)
+    if (_lapText) {
       _lapText.text = $"{_baseLapTemplate} {lapNumber}";
+    }
   }
 
   private string FormatCheckpointText(int current, int total) {

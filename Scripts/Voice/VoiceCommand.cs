@@ -5,13 +5,16 @@ namespace Whisper.Samples {
     public string[] keywords;
 
     public bool Matches(string text) {
-      if (string.IsNullOrEmpty(text))
+      if (string.IsNullOrEmpty(text)) {
         return false;
+      }
+
       var lowerText = text.ToLowerInvariant();
 
       foreach (var keyword in keywords) {
-        if (lowerText.Contains(keyword.ToLowerInvariant()))
+        if (lowerText.Contains(keyword.ToLowerInvariant())) {
           return true;
+        }
       }
       return false;
     }
