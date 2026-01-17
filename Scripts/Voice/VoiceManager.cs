@@ -17,10 +17,6 @@ namespace Assets.Scripts.Voice {
     // CAMBIO 1: Ya no es _activeCar, ahora es genérico
     [SerializeField] private GameObject _commandReceiver;
 
-    [Header("VAD Settings (Manos Libres)")]
-    [SerializeField] private float _volumeThreshold = 0.02f;
-    [SerializeField] private float _silenceDurationToCut = 0.5f;
-    [SerializeField] private float _maxRecordDuration = 2.0f;
 
     [Header("Feedback UI")]
     [SerializeField] private TMPro.TMP_Text _statusText;

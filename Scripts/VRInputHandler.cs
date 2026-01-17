@@ -1,54 +1,103 @@
 using UnityEngine;
 
 public class VRInputHandler : MonoBehaviour {
-  [Header("Calibration")]
-  [SerializeField] private float _maxPhoneTilt = 25f;
-  [SerializeField] private float _accelerationTiltOffset = 30f; // Los 30 grados de inclinación base
 
-  public float SteerInput { get; private set; } // Rango -1 a 1
-  public float ThrottleInput { get; private set; } // Rango -1 a 1
+  [Header("Configuración de Inclinación")]
+  [Tooltip("Cuánto hay que bajar la cabeza para ir a máxima velocidad (Grados)")]
+  [SerializeField] private float _maxPhoneTilt = 20f;
+
+  [Tooltip("El ángulo considerado 'Neutro'. Ponlo en 0 para que mirar al horizonte sea parar.")]
+  [SerializeField] private float _neutralAngle = 0f;
+
+  [Tooltip("Grados de margen para que el coche no se mueva si tiemblas un poco")]
+  [SerializeField] private float _deadzone = 5f;
+
+  public float SteerInput { get; private set; }
+  public float ThrottleInput { get; private set; }
   public bool IsBraking { get; private set; }
 
   private Gyroscope _gyro;
 
   private void Start() {
-    _gyro = Input.gyro;
-    _gyro.enabled = true;
+    if (SystemInfo.supportsGyroscope) {
+      _gyro = Input.gyro;
+      _gyro.enabled = true;
+    }
   }
 
   private void Update() {
-    Quaternion quaternion = _gyro.attitude;
-    // Conversión de coordenadas de Android/iOS a Unity
-    quaternion = Quaternion.Euler(90, 0, -90) * new Quaternion(-quaternion.x, -quaternion.y, quaternion.z, quaternion.w);
+    if (_gyro != null) {
+      ProcesarGiroscopio();
+    }
 
-    // 2. Calcular Giro (Steering)
-    float rawTiltZ = quaternion.eulerAngles.z > 180 ? quaternion.eulerAngles.z - 360 : quaternion.eulerAngles.z;
-    SteerInput = Mathf.Clamp(rawTiltZ / _maxPhoneTilt, -1f, 1f) * -1f; // Invertido según tu código
+#if UNITY_EDITOR
+    ProcesarTeclado();
+#endif
+  }
 
-    // 3. Calcular Aceleración (Throttle)
-    float rawTiltX = quaternion.eulerAngles.x - _accelerationTiltOffset;
-    float adjustedX = rawTiltX > 180 ? rawTiltX - 360 : rawTiltX;
-    ThrottleInput = Mathf.Clamp(adjustedX / _maxPhoneTilt, -1f, 1f);
+  private void ProcesarGiroscopio() {
+    // 1. Obtener orientación corregida
+    Quaternion q = _gyro.attitude;
+    Quaternion rot = Quaternion.Euler(90, 0, -90) * new Quaternion(-q.x, -q.y, q.z, q.w);
 
-#if UNITY_EDITOR  // Debug con teclado
-    ThrottleInput = 0;
+    // 2. Calcular Pitch (Arriba/Abajo) para Acelerar
+    float pitch = rot.eulerAngles.x;
+    // Normalizar ángulo (-180 a 180) para entender si miras arriba o abajo
+    if (pitch > 180) {
+      pitch -= 360;
+    }
+
+    // Restar el ángulo neutro (si quieres calibrar)
+    float anguloAceleracion = pitch - _neutralAngle;
+
+    // APLICAR DEADZONE (Zona Muerta)
+    // Si el ángulo está entre -5 y 5, nos quedamos quietos
+    if (Mathf.Abs(anguloAceleracion) < _deadzone) {
+      ThrottleInput = 0;
+    } else {
+      // Si pasamos la zona muerta, calculamos la potencia
+      // Restamos la deadzone para que la aceleración empiece suave desde 0
+      float input = (anguloAceleracion > 0)
+          ? (anguloAceleracion - _deadzone)
+          : (anguloAceleracion + _deadzone);
+
+      ThrottleInput = Mathf.Clamp(input / _maxPhoneTilt, -1f, 1f);
+    }
+
+    // 3. Calcular Roll (Izquierda/Derecha) para Girar
+    float roll = rot.eulerAngles.z;
+    if (roll > 180) {
+      roll -= 360;
+    }
+
+    // Zona muerta también para el giro
+    if (Mathf.Abs(roll) < _deadzone) {
+      SteerInput = 0;
+    } else {
+      float steerVal = (roll > 0) ? (roll - _deadzone) : (roll + _deadzone);
+      // Invertimos (* -1) porque suele estar al revés en landscape
+      SteerInput = Mathf.Clamp(steerVal / _maxPhoneTilt, -1f, 1f) * -1f;
+    }
+
+    // Freno simple: Si miramos muy arriba (reversa fuerte) o tocamos pantalla
+    IsBraking = Input.touchCount > 0;
+  }
+
+  private void ProcesarTeclado() {
     if (Input.GetKey(KeyCode.W)) {
       ThrottleInput = 1;
-    }
-
-    if (Input.GetKey(KeyCode.S)) {
+    } else if (Input.GetKey(KeyCode.S)) {
       ThrottleInput = -1;
     }
-    SteerInput = 0;
+
     if (Input.GetKey(KeyCode.A)) {
       SteerInput = -1;
-    }
-
-    if (Input.GetKey(KeyCode.D)) {
+    } else if (Input.GetKey(KeyCode.D)) {
       SteerInput = 1;
     }
 
-    IsBraking = Input.GetKey(KeyCode.Space);
-#endif
+    if (Input.GetKey(KeyCode.Space)) {
+      IsBraking = true;
+    }
   }
 }

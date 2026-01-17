@@ -127,4 +127,5 @@ public class MainMenuManager : MonoBehaviour {
     _trackNameText.text = GameManager.Instance.TrackDisplayNames[_trackIndex];
     _lapsText.text = _laps.ToString();
   }
+
 }
