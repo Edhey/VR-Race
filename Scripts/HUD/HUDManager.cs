@@ -23,7 +23,6 @@ public class HUDManager : MonoBehaviour {
   [SerializeField] private float _minNeedleAngle = 20f;
   [SerializeField] private float _maxNeedleAngle = -200f;
   [SerializeField] private float _maxSpeed = 200f;
-  [SerializeField] private float _maxRPM = 8000f;
 
   private CheckpointHandler _checkpointHandler;
 

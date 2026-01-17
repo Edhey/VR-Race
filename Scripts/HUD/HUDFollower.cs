@@ -2,7 +2,6 @@ using UnityEngine;
 
 [RequireComponent(typeof(RectTransform))]
 public class HUDFollower : MonoBehaviour {
-  public float Distance = 2.0f; // Distancia en metros (confort VR)
   [Range(0.1f, 1.0f)]
   public float FillPercent = 0.8f;
 
