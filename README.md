@@ -43,11 +43,9 @@ Esta aplicación de realidad virtual ha sido desarrollada utilizando Unity y est
 
 El prototipo ofrece una experiencia de realidad virtual inmersiva y accesible, totalmente en "manos libres", gracias a la integración de controles por mirada y comandos de voz.
 
-La interfaz de usuario ha sido cuidadosamente diseñada para ser intuitiva y fácil de navegar, permitiendo a los usuarios interactuar con el entorno virtual sin necesidad de dispositivos adicionales. Esto se ha logrado mediante el uso de gaze control para la selección de botones y menús, así como la implementación de comandos de voz para facilitar la navegación y las interacciones dentro del entorno. Además, se ha incluido un sistema que a partir de los checkpoints que tiene el nivel, se genera en el HUD un minimapa ligero que sirve para guiar al usuario durante la carrera.
+La interfaz de usuario ha sido cuidadosamente diseñada para ser intuitiva y fácil de navegar, permitiendo a los usuarios interactuar con el entorno virtual sin necesidad de dispositivos adicionales. Esto se ha logrado mediante el uso de gaze control para la selección de botones y menús, así como la implementación de comandos de voz para facilitar la navegación y las interacciones dentro del entorno. Además, se han creado varios entornos de carrera  con splines, incluido un sistema que, a partir de los checkpoints que tiene el nivel, genera en el HUD un minimapa ligero que sirve para guiar al usuario durante la carrera.
 
-También, la aplicación aprovecha las capacidades del dispositivo móvil, utilizando sensores como el giroscopio y el sensor de luminosidad para mejorar la experiencia de usuario. El sensor de luminosidad permite que cuando el usuario se quite las gafas cardboard, la aplicación detecte el cambio de luz y pause automáticamente la experiencia, asegurando que el usuario no pierda su progreso.
-
-Por otro lado, se han implementado varias características destacables que enriquecen la experiencia de juego:
+**Uso del móvil**:  La aplicación aprovecha las capacidades del dispositivo móvil, utilizando sensores como el giroscopio y el sensor de luminosidad para mejorar la experiencia de usuario. El sensor de luminosidad permite que cuando el usuario se quite las gafas cardboard, la aplicación detecte el cambio de luz y pause automáticamente la experiencia, asegurando que el usuario no pierda su progreso.
 
 **Sistema de Power-ups Dinámicos**: La implementación de power-ups activables mediante comandos de voz (como el boost) añade capas de estrategia y dinamismo al gameplay, permitiendo al usuario controlar completamente estas mecánicas sin necesidad de tocar botones físicos.
 
@@ -55,7 +53,7 @@ Por otro lado, se han implementado varias características destacables que enriq
 
 **Sistema de Checkpoints Inteligente**: Detección automática de si el usuario ha saltado checkpoints durante la vuelta, alertando en tiempo real y manteniendo un conteo preciso de vueltas completadas correctamente, mejorando la experiencia competitiva.
 
-**Audio Espacializado**: Implementación de efectos de audio del motor del coche y sonido del viento que varían dinámicamente según la velocidad del vehículo, creando una capa adicional de inmersión auditiva en la experiencia.
+**Audio Espacializado**: Implementación de efectos de audio del motor del coche (3D) y sonido del viento (2D) que varían dinámicamente según la velocidad del vehículo, creando una capa adicional de inmersión auditiva en la experiencia.
 
 **Brújula Direccional Integrada en HUD**: Más allá del minimapa, se incluye una brújula que orienta al usuario en tiempo real utilizando el magnetómetro del dispositivo, facilitando la navegación espacial y el seguimiento de objetivos sin perder orientación.
 
