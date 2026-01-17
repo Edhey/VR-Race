@@ -41,7 +41,31 @@ Esta aplicación de realidad virtual ha sido desarrollada utilizando Unity y est
 
 ## Aspectos que destacarías en la aplicación
 
-El prototipo ofrece una experiencia de realidad virtual inmersiva y accesible, totalmente en "manos libres", gracias a la integración de controles por mirada y comandos de voz. La interfaz de usuario ha sido cuidadosamente diseñada para ser intuitiva y fácil de navegar, permitiendo a los usuarios interactuar con el entorno virtual sin necesidad de dispositivos adicionales. Además, la aplicación aprovecha las capacidades del dispositivo móvil, utilizando sensores como el giroscopio y el acelerómetro para mejorar la experiencia de inmersión y proporcionar una interacción más natural con un Heads Up Display que sigue el movimiento del usuario. La combinación de estas tecnologías crea una experiencia multimodal que enriquece la forma en que los usuarios pueden explorar y disfrutar del entorno virtual.
+El prototipo ofrece una experiencia de realidad virtual inmersiva y accesible, totalmente en "manos libres", gracias a la integración de controles por mirada y comandos de voz.
+
+La interfaz de usuario ha sido cuidadosamente diseñada para ser intuitiva y fácil de navegar, permitiendo a los usuarios interactuar con el entorno virtual sin necesidad de dispositivos adicionales. Esto se ha logrado mediante el uso de gaze control para la selección de botones y menús, así como la implementación de comandos de voz para facilitar la navegación y las interacciones dentro del entorno. Además, se ha incluido un sistema que a partir de los checkpoints que tiene el nivel, se genera en el HUD un minimapa ligero que sirve para guiar al usuario durante la carrera.
+
+También, la aplicación aprovecha las capacidades del dispositivo móvil, utilizando sensores como el giroscopio y el sensor de luminosidad para mejorar la experiencia de usuario. El sensor de luminosidad permite que cuando el usuario se quite las gafas cardboard, la aplicación detecte el cambio de luz y pause automáticamente la experiencia, asegurando que el usuario no pierda su progreso.
+
+Por otro lado, se han implementado varias características destacables que enriquecen la experiencia de juego:
+
+**Sistema de Power-ups Dinámicos**: La implementación de power-ups activables mediante comandos de voz (como el boost) añade capas de estrategia y dinamismo al gameplay, permitiendo al usuario controlar completamente estas mecánicas sin necesidad de tocar botones físicos.
+
+**Comandos de Voz Contextuales**: Más allá de la navegación del menú, el sistema soporta comandos específicos del juego como aceleración, frenado, cambio de color del vehículo y salto, proporcionando control total mediante interacción vocal durante la experiencia de carrera.
+
+**Sistema de Checkpoints Inteligente**: Detección automática de si el usuario ha saltado checkpoints durante la vuelta, alertando en tiempo real y manteniendo un conteo preciso de vueltas completadas correctamente, mejorando la experiencia competitiva.
+
+**Audio Espacializado**: Implementación de efectos de audio del motor del coche y sonido del viento que varían dinámicamente según la velocidad del vehículo, creando una capa adicional de inmersión auditiva en la experiencia.
+
+**Brújula Direccional Integrada en HUD**: Más allá del minimapa, se incluye una brújula que orienta al usuario en tiempo real utilizando el magnetómetro del dispositivo, facilitando la navegación espacial y el seguimiento de objetivos sin perder orientación.
+
+**Centrado Automático de Vista**: Sistema de auto-centrado que corrige y reajusta la posición de la cámara virtual, mejorando significativamente la experiencia en movimientos prolongados y reduciendo la fatiga visual.
+
+**Arquitectura Modular con Eventos y Delegados**: El código implementa un sistema robusto de eventos y delegados en C# que desacopla completamente los componentes (Voice Manager, GameManager, HUDManager, etc.), facilitando la expansión del proyecto y el mantenimiento del código a largo plazo.
+
+**Menú Principal Ergonómico**: Interfaz de inicio diseñada específicamente para VR, controlada exclusivamente por gaze, con posicionamiento estratégico de elementos dentro de las zonas de confort visual para garantizar accesibilidad y una experiencia sin frustración desde el primer momento.
+
+La combinación de estas tecnologías crea una experiencia multimodal que enriquece la forma en que los usuarios pueden explorar y disfrutar del entorno virtual, demostrando cómo la integración inteligente de múltiples modalidades de interacción puede crear aplicaciones más accesibles e inmersivas.
 
 ## Especificar qué sensores se han incluido sensores de los que se han trabajado en interfaces multimodales
 
