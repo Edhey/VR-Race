@@ -8,8 +8,7 @@ namespace Whisper.Samples {
         return;
       }
 
-      var car = target.GetComponent<CarController>();
-      if (car == null) {
+      if (!target.TryGetComponent(out CarController car)) {
         car = target.GetComponentInParent<CarController>();
       }
 

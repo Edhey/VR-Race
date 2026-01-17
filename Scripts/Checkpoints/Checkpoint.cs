@@ -1,5 +1,5 @@
 using UnityEngine;
 
 public class Checkpoint : MonoBehaviour {
-  public int Index;
+  [field: SerializeField] public int Index { get; private set; }
 }

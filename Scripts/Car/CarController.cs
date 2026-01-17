@@ -1,13 +1,16 @@
-using UnityEngine;
 using System;
 using Assets.Scripts.Voice;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(VRInputHandler))]
 public class CarController : MonoBehaviour {
-
-  public float maxSpeed = 200f;
   public static event Action<float, float, int> OnCarTelemetryUpdated;
+
+  [Header("Velocidad máxima")]
+  [FormerlySerializedAs("maxSpeed")]
+  [SerializeField] private float _maxSpeed = 200f;
 
   [Header("Stability Settings")]
   [Tooltip("Lower this value (e.g., -0.5 or -1.0) to keep the car from flipping.")]
@@ -37,9 +40,9 @@ public class CarController : MonoBehaviour {
       _inputHandler = GetComponent<VRInputHandler>();
     }
 
-    var voiceMgr = FindFirstObjectByType<VoiceManager>();
+    VoiceManager voiceMgr = FindFirstObjectByType<VoiceManager>();
     if (voiceMgr != null) {
-      voiceMgr.RegisterReceiver(this.gameObject);
+      voiceMgr.RegisterReceiver(gameObject);
       Debug.Log("[CarController] Registrado correctamente en VoiceManager.");
     } else {
       Debug.LogWarning("[CarController] No se encontró VoiceManager en la escena.");
@@ -90,7 +93,7 @@ public class CarController : MonoBehaviour {
   private void EmitTelemetry() {
     float speedKmh = _rb.linearVelocity.magnitude * 3.6f;
 
-    float fakeRPM = Mathf.Lerp(1000, 8000, speedKmh / maxSpeed);
+    float fakeRPM = Mathf.Lerp(1000, 8000, speedKmh / _maxSpeed);
     int gear = (Vector3.Dot(transform.forward, _rb.linearVelocity) > 0) ? 1 : -1;
 
     // Disparamos el evento estático

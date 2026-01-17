@@ -1,6 +1,8 @@
 using UnityEngine;
+using UnityEngine.Serialization;
+using Whisper.Samples;
 
-namespace Whisper.Samples {
+namespace Assets.Scripts.Voice {
   // Definimos qué puede hacer el menú
   public enum MenuAction {
     NextCar,
@@ -14,16 +16,18 @@ namespace Whisper.Samples {
   [CreateAssetMenu(fileName = "NewMenuCommand", menuName = "Voice Commands/Menu Action")]
   public class MenuCommand : VoiceCommand {
 
-    public MenuAction actionType;
+    [FormerlySerializedAs("actionType")]
+    [SerializeField] private MenuAction _actionType;
+
+    public MenuAction ActionType => _actionType;
 
     public override void Execute(GameObject target) {
       // Buscamos el gestor del menú en el objeto que recibe la orden
-      var menu = target.GetComponent<MainMenuManager>();
-      if (menu == null) {
+      if (!target.TryGetComponent(out MainMenuManager menu)) {
         return;
       }
 
-      switch (actionType) {
+      switch (_actionType) {
         case MenuAction.NextCar:
           menu.NextCar();
           break;

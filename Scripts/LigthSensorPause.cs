@@ -4,14 +4,14 @@ using UnityEngine.InputSystem;
 public class LightSensorPause : MonoBehaviour {
   private LightSensor _lightSensor;
 
-  void Start() {
+  private void Start() {
     if (LightSensor.current != null) {
       _lightSensor = LightSensor.current;
       InputSystem.EnableDevice(_lightSensor);
     }
   }
 
-  void Update() {
+  private void Update() {
     if (_lightSensor == null) {
       return;
     }
@@ -34,7 +34,7 @@ public class LightSensorPause : MonoBehaviour {
     }
   }
 
-  void OnDisable() {
+  private void OnDisable() {
     if (_lightSensor != null) {
       InputSystem.DisableDevice(_lightSensor);
     }

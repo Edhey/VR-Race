@@ -1,9 +1,12 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 public class AutoCenter : MonoBehaviour {
-  public Transform target;
-  public Transform vrCamera;
+  [FormerlySerializedAs("target")]
+  [SerializeField] private Transform _target;
+  [FormerlySerializedAs("vrCamera")]
+  [SerializeField] private Transform _vrCamera;
 
   private void Start() {
     StartCoroutine(CenterView());
@@ -11,9 +14,9 @@ public class AutoCenter : MonoBehaviour {
 
   private IEnumerator CenterView() {
     yield return _waitForSeconds0_1;
-    if (target != null && vrCamera != null) {
-      float userRotationY = vrCamera.localEulerAngles.y;
-      Vector3 directionToCar = target.position - transform.position;
+    if (_target != null && _vrCamera != null) {
+      float userRotationY = _vrCamera.localEulerAngles.y;
+      Vector3 directionToCar = _target.position - transform.position;
       directionToCar.y = 0;
       Quaternion rotationTowardsCar = Quaternion.LookRotation(directionToCar);
       float finalAngle = rotationTowardsCar.eulerAngles.y - userRotationY;

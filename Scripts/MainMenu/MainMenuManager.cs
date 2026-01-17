@@ -1,28 +1,28 @@
-using UnityEngine;
+using System;
+using Assets.Scripts.Voice;
 using TMPro; // Necesario para los textos
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Assets.Scripts.Voice;
-using System;
 
 public class MainMenuManager : MonoBehaviour {
 
   [Header("UI Referencias")]
-  [SerializeField] private TMP_Text carNameText;
-  [SerializeField] private TMP_Text trackNameText;
-  [SerializeField] private TMP_Text lapsText;
-  [SerializeField] private Image carPreviewImage;
+  [SerializeField] private TMP_Text _carNameText;
+  [SerializeField] private TMP_Text _trackNameText;
+  [SerializeField] private TMP_Text _lapsText;
+  [SerializeField] private Image _carPreviewImage;
 
   // Variables locales para navegar por el menú
   private int _carIndex = 0;
   private int _trackIndex = 0;
   private int _laps = 3;
 
-  void Start() {
+  private void Start() {
     // UpdateUI(); // Primero se muestra que es cada cosa
-    var voiceMgr = FindObjectOfType<VoiceManager>();
-    if (voiceMgr != null) {
-      voiceMgr.RegisterReceiver(this.gameObject);
+    VoiceManager[] voiceMgrs = FindObjectsByType<VoiceManager>(FindObjectsSortMode.None);
+    if (voiceMgrs != null && voiceMgrs.Length > 0) {
+      voiceMgrs[0].RegisterReceiver(gameObject);
     }
   }
 
@@ -32,7 +32,7 @@ public class MainMenuManager : MonoBehaviour {
   /// </summary>
   public void NextCar() {
     _carIndex++;
-    if (_carIndex >= GameManager.Instance.carPrefabs.Length) {
+    if (_carIndex >= GameManager.Instance.CarPrefabs.Length) {
       _carIndex = 0;
     }
 
@@ -45,7 +45,7 @@ public class MainMenuManager : MonoBehaviour {
   public void PrevCar() {
     _carIndex--;
     if (_carIndex < 0) {
-      _carIndex = GameManager.Instance.carPrefabs.Length - 1;
+      _carIndex = GameManager.Instance.CarPrefabs.Length - 1;
     }
 
     UpdateUI();
@@ -57,7 +57,7 @@ public class MainMenuManager : MonoBehaviour {
   /// </summary>
   public void NextTrack() {
     _trackIndex++;
-    if (_trackIndex >= GameManager.Instance.trackScenes.Length) {
+    if (_trackIndex >= GameManager.Instance.TrackScenes.Length) {
       _trackIndex = 0;
     }
 
@@ -71,7 +71,7 @@ public class MainMenuManager : MonoBehaviour {
   public void PrevTrack() {
     _trackIndex--;
     if (_trackIndex < 0) {
-      _trackIndex = GameManager.Instance.trackScenes.Length - 1;
+      _trackIndex = GameManager.Instance.TrackScenes.Length - 1;
     }
 
     UpdateUI();
@@ -107,24 +107,24 @@ public class MainMenuManager : MonoBehaviour {
   /// </summary>
   public void StartRace() {
     // Guardamos los datos seleccionados en el GameManager
-    GameManager.Instance.selectedCarIndex = _carIndex;
-    GameManager.Instance.selectedTrackScene = GameManager.Instance.trackScenes[_trackIndex];
-    GameManager.Instance.totalLaps = _laps;
-    SceneManager.LoadScene(GameManager.Instance.selectedTrackScene);
+    GameManager.Instance.SelectedCarIndex = _carIndex;
+    GameManager.Instance.SelectedTrackScene = GameManager.Instance.TrackScenes[_trackIndex];
+    GameManager.Instance.TotalLaps = _laps;
+    SceneManager.LoadScene(GameManager.Instance.SelectedTrackScene);
   }
 
   /// <summary>
   /// Actualiza la UI del menú principal con los datos actuales.
   /// </summary>
   private void UpdateUI() {
-    GameObject carPrefab = GameManager.Instance.carPrefabs[_carIndex];
-    carNameText.text = carPrefab.name;
-    if (GameManager.Instance.carSprites.Length > _carIndex) {
-      carPreviewImage.sprite = GameManager.Instance.carSprites[_carIndex];
-      carPreviewImage.preserveAspect = true;
+    GameObject carPrefab = GameManager.Instance.CarPrefabs[_carIndex];
+    _carNameText.text = carPrefab.name;
+    if (GameManager.Instance.CarSprites.Length > _carIndex) {
+      _carPreviewImage.sprite = GameManager.Instance.CarSprites[_carIndex];
+      _carPreviewImage.preserveAspect = true;
     }
 
-    trackNameText.text = GameManager.Instance.trackDisplayNames[_trackIndex];
-    lapsText.text = _laps.ToString();
+    _trackNameText.text = GameManager.Instance.TrackDisplayNames[_trackIndex];
+    _lapsText.text = _laps.ToString();
   }
 }

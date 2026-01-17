@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Whisper.Samples {
   [CreateAssetMenu(fileName = "BrakeCommand", menuName = "Voice Commands/Brake")]
   public class BrakeCommand : VoiceCommand {
-    public float brakeForce = 5f;
+    [FormerlySerializedAs("brakeForce")]
+    [SerializeField] private float _brakeForce = 5f;
 
     public override void Execute(GameObject target) {
       // ApplyBrakes(brakeTorque * 5);

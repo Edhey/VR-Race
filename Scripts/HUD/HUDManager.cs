@@ -7,8 +7,6 @@ using System.Collections;
 public class HUDManager : MonoBehaviour {
   [Header("UI Elements (Telemetry)")]
   [SerializeField] private RectTransform _needleTransform;
-  [SerializeField] private Image _rpmBar;
-  [SerializeField] private TMP_Text _gearText;
 
   [Header("UI Elements (Race Info)")]
   [SerializeField] private TMP_Text _currentCheckpointText;
@@ -27,7 +25,7 @@ public class HUDManager : MonoBehaviour {
   [SerializeField] private float _maxSpeed = 200f;
   [SerializeField] private float _maxRPM = 8000f;
 
-  [SerializeField] private CheckpointHandler _checkpointHandler;
+  private CheckpointHandler _checkpointHandler;
 
   private float _elapsedTime = 0f;
   private bool _timerIsRunning = false;
@@ -35,17 +33,12 @@ public class HUDManager : MonoBehaviour {
   private string _baseCheckpointTemplate;
   private string _baseTimeTemplate;
   private Coroutine _warningCoroutine;
+  private Canvas _finalScreenReticleCanvas;
+  private VRGazeClicker _finalScreenReticleScript;
 
-  private void Awake() {
-    if (_checkpointHandler == null) {
-      // Intenta buscarlo automáticamente si se te olvidó ponerlo
-      _checkpointHandler = FindFirstObjectByType<CheckpointHandler>();
-      if (_checkpointHandler == null) {
-        Debug.LogWarning("HUDManager: CheckpointHandler reference is missing!");
-      }
-    }
 
-    // Inicializar textos base
+
+  private void Start() {
     if (_lapText) {
       _baseLapTemplate = _lapText.text;
     }
@@ -62,18 +55,10 @@ public class HUDManager : MonoBehaviour {
       _skippedPointImage.gameObject.SetActive(false);
       SetImageAlpha(1f);
     }
-  }
-
-  private void Update() {
-    if (_timerIsRunning && _timeText != null) {
-      _elapsedTime += Time.deltaTime;
-      _timeText.text = FormatTime(_elapsedTime);
+    _checkpointHandler = FindFirstObjectByType<CheckpointHandler>();
+    if (_checkpointHandler == null) {
+      Debug.LogWarning("HUDManager: CheckpointHandler reference is missing!");
     }
-  }
-
-  private void OnEnable() {
-    // --- CAMBIO CLAVE: Suscripción al evento estático del coche ---
-    // Esto permite que funcione aunque el coche se cree (Spawn) al iniciar la partida
     CarController.OnCarTelemetryUpdated += UpdateHUD;
 
     if (_checkpointHandler != null) {
@@ -83,10 +68,34 @@ public class HUDManager : MonoBehaviour {
       _checkpointHandler.OnRaceStarted += StartTimer;
       _checkpointHandler.OnRaceFinished += ShowRaceFinished;
     }
+    CarLoader carLoader = FindObjectsByType<CarLoader>(FindObjectsSortMode.None)[0];
+    if (carLoader == null || carLoader.CurrentCar == null) {
+      Debug.LogWarning("HUDManager: CarLoader or CurrentCar reference is missing!");
+      return;
+    }
+    _finalScreenReticleCanvas =
+      carLoader.CurrentCar.GetComponentInChildren<Canvas>(true);
+    if (_finalScreenReticleCanvas != null) {
+      _finalScreenReticleCanvas.enabled = false;
+    } else {
+      Debug.LogWarning("HUDManager: No Canvas found on CurrentCar!");
+    }
+    _finalScreenReticleScript =
+      carLoader.CurrentCar.GetComponentInChildren<VRGazeClicker>();
+    if (_finalScreenReticleScript == null) {
+      Debug.LogWarning("HUDManager: No VRGazeClicker found on CurrentCar!");
+    }
   }
 
+  private void Update() {
+    if (_timerIsRunning && _timeText != null) {
+      _elapsedTime += Time.deltaTime;
+      _timeText.text = FormatTime(_elapsedTime);
+    }
+  }
+
+
   private void OnDisable() {
-    // Desuscripción obligatoria para evitar errores
     CarController.OnCarTelemetryUpdated -= UpdateHUD;
 
     if (_checkpointHandler != null) {
@@ -98,33 +107,14 @@ public class HUDManager : MonoBehaviour {
     }
   }
 
-  // --- LÓGICA DE TELEMETRÍA (VELOCÍMETRO) ---
   private void UpdateHUD(float speed, float rpm, int gear) {
-    // 1. Aguja de Velocidad
     if (_needleTransform != null) {
       float normalizedSpeed = Mathf.Clamp01(speed / _maxSpeed);
       float angle = Mathf.Lerp(_minNeedleAngle, _maxNeedleAngle, normalizedSpeed);
       _needleTransform.localRotation = Quaternion.Euler(0, 0, angle);
     }
-
-    // 2. Barra de RPM
-    if (_rpmBar != null) {
-      _rpmBar.fillAmount = rpm / _maxRPM;
-      // Opcional: Cambiar color si llega al límite
-      if (rpm > _maxRPM * 0.9f) {
-        _rpmBar.color = Color.red;
-      } else {
-        _rpmBar.color = Color.cyan;
-      }
-    }
-
-    // 3. Marchas
-    if (_gearText != null) {
-      _gearText.text = (gear == 1) ? "D" : (gear == -1) ? "R" : "N";
-    }
   }
 
-  // --- LÓGICA DE CARRERA (Tus métodos originales) ---
 
   private void StartTimer() {
     _timerIsRunning = true;
@@ -146,7 +136,6 @@ public class HUDManager : MonoBehaviour {
     Color currentColor = _skippedPointImage.color;
     while (fadeTimer < _fadeDuration) {
       fadeTimer += Time.deltaTime;
-      fadeTimer = Mathf.Min(fadeTimer, _fadeDuration); // Safety clamp
       float fadeProgress = fadeTimer / _fadeDuration;
 
       currentColor.a = Mathf.Lerp(1f, 0f, fadeProgress);
@@ -182,6 +171,8 @@ public class HUDManager : MonoBehaviour {
     if (_raceFinishedImage != null) {
       _raceFinishedImage.gameObject.SetActive(true);
       _timerIsRunning = false;
+      _finalScreenReticleCanvas.gameObject.SetActive(true);
+      _finalScreenReticleScript.enabled = true;
     }
     if (_timeText != null) {
       _timeText.color = Color.green;
@@ -209,4 +200,5 @@ public class HUDManager : MonoBehaviour {
   private string FormatCheckpointText(int current, int total) {
     return $"{_baseCheckpointTemplate} {current}/{total}";
   }
+
 }

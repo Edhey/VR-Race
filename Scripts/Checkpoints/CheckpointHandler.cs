@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CheckpointHandler : MonoBehaviour {
   public int TotalCheckpoints { get; private set; }
@@ -12,7 +13,13 @@ public class CheckpointHandler : MonoBehaviour {
   public event RaceStarted OnRaceStarted;
   public delegate void RaceFinished();
   public event RaceFinished OnRaceFinished;
-  public int NumberOfLaps;
+
+  [FormerlySerializedAs("NumberOfLaps")]
+  [SerializeField] private int _numberOfLaps;
+  public int NumberOfLaps {
+    get => _numberOfLaps;
+    set => _numberOfLaps = value;
+  }
 
   private void Awake() {
     TotalCheckpoints =
@@ -32,12 +39,13 @@ public class CheckpointHandler : MonoBehaviour {
     }
     if (_nextCheckpointIndex == 0 && _currentLap == 0) {
       OnRaceStarted?.Invoke();
+      OnLapCompleted?.Invoke(_currentLap);
     }
     _nextCheckpointIndex++;
-    OnCheckpointReached?.Invoke(checkpointIndex);
     if (_nextCheckpointIndex >= TotalCheckpoints) {
       _nextCheckpointIndex = 0;
     }
+    OnCheckpointReached?.Invoke(_nextCheckpointIndex);
     if (_nextCheckpointIndex == 0) {
       _currentLap++;
       OnLapCompleted?.Invoke(_currentLap);

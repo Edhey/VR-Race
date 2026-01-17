@@ -1,26 +1,58 @@
 using UnityEngine;
 
+[RequireComponent(typeof(RectTransform))]
 public class HUDFollower : MonoBehaviour {
-  [Header("Objetivo")]
-  [SerializeField] private Transform _headTarget;
+  public float Distance = 2.0f; // Distancia en metros (confort VR)
+  [Range(0.1f, 1.0f)]
+  public float FillPercent = 0.8f;
 
-  [Header("Configuración Iron Man")]
+
+  [Header("Configuración HUD")]
   [SerializeField] private float _distance = 1.5f;
   [SerializeField] private float _smoothSpeed = 10f;
-  [SerializeField] private Vector3 _offset = new Vector3(0, -0.2f, 0);
+  [SerializeField] private Vector3 _offset = new(0, -0.2f, 0);
+  private CarLoader _carLoader;
+  private Camera _headTarget;
+
+  private void Start() {
+    _carLoader = FindObjectsByType<CarLoader>(FindObjectsSortMode.None)[0];
+    if (_carLoader == null || _carLoader.CurrentCar == null) {
+      Debug.LogWarning("HUDFollower: CarLoader or CurrentCar reference is missing!");
+      return;
+    }
+    _headTarget = _carLoader.CurrentCar.GetComponentInChildren<Camera>();
+    if (_headTarget == null) {
+      Debug.LogWarning("HUDFollower: No Camera found on CurrentCar!");
+    }
+  }
 
   /// <summary>
   /// Actualiza la posición y rotación del HUD para seguir la cabeza del 
   /// usuario con un efecto suave.
   /// </summary>
-  void LateUpdate() {
+  private void LateUpdate() {
     if (_headTarget == null) {
       return;
     }
 
-    Vector3 targetPosition = _headTarget.position + (_headTarget.forward * _distance) + _offset;
-    Quaternion targetRotation = _headTarget.rotation;
-    transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * _smoothSpeed);
-    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * _smoothSpeed);
+    Transform cam = _headTarget.transform;
+
+    Vector3 targetPos = cam.TransformPoint(new Vector3(_offset.x, _offset.y, _distance));
+
+    float rotationSmooth = _smoothSpeed * 1.5f;
+
+    transform.SetPositionAndRotation(
+      Vector3.Lerp(
+        transform.position,
+         targetPos,
+          Time.deltaTime * _smoothSpeed
+          ),
+          Quaternion.Slerp(
+            transform.rotation,
+            cam.rotation,
+            Time.deltaTime * rotationSmooth
+            )
+      );
   }
+
 }
